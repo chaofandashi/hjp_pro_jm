@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/27576/workspace/LR_Script2/lrapi.jar"/>
+	<classpathentry kind="lib" path="C:/Users/27576/hjp_pro_jm/workspace/LR_Script2/lrapi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
