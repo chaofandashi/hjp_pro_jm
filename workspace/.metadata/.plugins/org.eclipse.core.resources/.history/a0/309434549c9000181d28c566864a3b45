@@ -1,0 +1,18 @@
+package cn.java.test;
+import cn.java.test.Dog;
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.*;
+
+public class t1 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Dog a=new Dog();
+		a.barking();
+		a.setAge(28);
+		a.getAge();
+		System.out.println("Hello World");
+	}
+
+}

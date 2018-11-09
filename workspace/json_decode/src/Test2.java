@@ -1,0 +1,145 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+//import java.util.Map;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.URI;
+import org.apache.http.Header;
+import org.apache.http.StatusLine;
+import org.apache.http.client.CookieStore;
+//import org.apache.http.HttpEntity;
+//import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.util.EntityUtils;
+
+import net.sf.json.JSONObject;
+
+//import com.google.gson.Gson;
+
+
+public class Test2 {
+    static String all_res=""; 
+    public static String HttpPostWithJson(String url) {
+    	String json = "{\"data\":{\"input_contents\":[{\"content_id\":\"57\",\"value\":\"短信文本内容\"}],\"pic_contents\":[]}}";
+		String returnValue = "这是默认返回值，接口调用失败";
+		//第一步：创建HttpClient对象
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		//第二步：创建httpPost对象
+        HttpPost httpPost = new HttpPost(url);	
+        //get方法
+        // HttpGet httpGet = new HttpGet(url);
+        //第三步：给httpPost设置JSON格式的参数  构建消息实体
+        StringEntity requestEntity = new StringEntity(json,"utf-8");
+        //将POST参数以UTF-8编码并包装成表单实体对象
+        requestEntity.setContentEncoding("UTF-8");        
+        //设置头信息
+        httpPost.setHeader("Content-Type", "application/json");
+        httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+        httpPost.setHeader("Cookie",all_res);
+        System.out.println(all_res);
+        httpPost.setEntity(requestEntity);   
+		try{	 	
+			//创建响应处理器处理服务器响应内容
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	       //第四步：发送HttpPost请求，获取返回值
+	       returnValue = httpClient.execute(httpPost,responseHandler); //调接口获取返回值时，必须用此方法
+     	   //解析json  多层次  单层就直接json.getString("origin")
+	       //json.getJSONObject("headers").getString("User-Agent");
+	       JSONObject json1 = JSONObject.fromObject(returnValue);
+	       System.out.println(json1.toString());
+	       
+		}
+		 catch(Exception e)
+		{
+			 e.printStackTrace();
+		}finally {
+	       try {
+			httpClient.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    }
+		 //第五步：处理返回值
+	     return returnValue;
+	}
+    public static String dopost(String url,String  params){
+    	// 定义HttpClient
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		HttpPost httpPost  = new HttpPost(url);
+		httpPost.setHeader("Accept", "application/json"); 
+		httpPost.setHeader("Content-Type", "application/json");
+		StringEntity entity = new StringEntity(params, "UTF-8");
+		httpPost.setEntity(entity);      
+		CloseableHttpResponse response = null;
+    	try { 		
+    		response =httpClient.execute(httpPost);
+    		StatusLine status = response.getStatusLine();
+    		
+    		String s1= response.getFirstHeader("Set-Cookie").toString();
+    		String[] strs = s1.split("; ");
+    		String[] strs2 = strs[0].split(": ");
+//    		System.out.println(strs2[0]); 
+    		System.out.println(strs2[1]);
+    		all_res = strs2[1];
+    	
+   
+//    		//从字符串中提取指定的字符串
+//    		String s="ssfsfhshfsfjjs13293016789yfdiyifdsafyasif";
+//    		//书写正则表达式
+//    		String regex="[1][34579]\\d{9}";
+//    		//将正则表达式转成正则对象
+//    		Pattern pattern =Pattern.compile(regex);
+//    		//正则对象与字符串匹配
+//    		Matcher matcher=pattern.matcher(s);
+//    		//匹配成功后打印出找到的结果            
+//    		
+//    		while(matcher.find()){
+//    			System.out.println(matcher.group());
+//    		}
+    					
+		} catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+		       try {
+					httpClient.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		return all_res;
+    	
+    }
+    
+    public static void main(String[] args) {
+//      String json = "{'data':{'phone':'13076220975','password':'a9825c9802e96ee7422a93f387fa864fb0f740f7'}";	
+    	String json="{\"data\":{\"phone\": \"13076220975\",\"password\": \"a9825c9802e96ee7422a93f387fa864fb0f740f7\"}}";
+        String url="https://jdev.bhsgd.net/user/login/h5";
+        Test2 test=new Test2();
+        test.dopost(url,json);
+        
+        
+        String order_url="https://jdev.bhsgd.net/integral/order/begin/63";
+        String s2=test.HttpPostWithJson(order_url);
+        
+//      JSONObject json2 = new JSONObject();
+//		json2.put("data","1");
+//		json2.put("name","张三");
+//		json2.put("pwd","123456");
+//		System.out.println(s);
+
+    }
+}

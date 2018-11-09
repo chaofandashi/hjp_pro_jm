@@ -1,0 +1,21 @@
+package cn.java.test;
+
+public class Dog {
+	String breed;
+	int age;
+	String color;
+	public Dog(){
+		System.out.print("123321");
+	}
+	void barking(){
+		
+	}
+	void hungry(){
+		
+	}
+	void sleeping(){
+		
+	}
+}
+
+

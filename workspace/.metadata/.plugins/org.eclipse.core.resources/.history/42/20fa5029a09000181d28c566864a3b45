@@ -1,0 +1,13 @@
+package cn.java.test;
+
+public class Emloyee {
+	String name;
+	int age;
+	String designation;
+	double salary;
+	
+	public Emloyee(String name){
+		this.name=name;
+	}
+	
+}
